@@ -9,7 +9,7 @@ var http = require("http").createServer(app);
 var io = require('socket.io')(http);
 http.listen(3000, "localhost");
 
-var serialportname = "";
+var serialportname = "/dev/tty.usbmodemfa131";
 var serialport_n = 9600;
 var subscriber = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 var client = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
@@ -58,19 +58,20 @@ var sp = new serialport.SerialPort(serialportname, {
     parity: 'none',
     stopBits: 1,
     flowControl: false,
-    parser: serialport.parsers.readline("\n")
+    parser: serialport.parsers.raw
 });
 
 sp.on('data', function(input) {
     var buffer = new Buffer(input, 'utf8');
+    var stop = buffer.toString();
     try {
           console.log(buffer);
-          if(buffer === "0"){
+          if(stop === "1"){
             console.log("stop");
             finish(id);
           }
     } catch(e) {
-        return;
+      return;
     }
 });
 
