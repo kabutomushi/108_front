@@ -28,7 +28,7 @@ app.get('/', function(req, res) {
   });
 });
 
-app.listen(3000, function() {
+app.listen(8080, function() {
   subscriber.subscribe('bnNotify');
 
   //redisをsubscribeして来たらクライアントに通知
@@ -57,9 +57,6 @@ app.get('/loading', function(req, res) {
 });
 app.get('/result', function(req, res) {
   io.emit("bonnou_result", bonnou[req.query.result]);
-});
-app.listen(8080, function() {
-  console.log('Example app listening on port 3000!');
 });
 
 io.on('connection', function(socket) {
