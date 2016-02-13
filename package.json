@@ -1,0 +1,24 @@
+{
+  "name": "108_front",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kabutomushi/108_front.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kabutomushi/108_front/issues"
+  },
+  "homepage": "https://github.com/kabutomushi/108_front#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "redis": "^2.4.2",
+    "socket.io": "^1.4.5"
+  }
+}
