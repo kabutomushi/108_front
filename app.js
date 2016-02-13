@@ -31,14 +31,17 @@ app.get('/', function(req, res) {
 
 app.listen(8080, function() {
   //煩悩待ち
-  subscriber.subscribe('bnNotify');
-  console.log("waiting bonnou data....");
-  io.emit("bonnou_loading", {});
+  subscriber.subscribe('bnStart');
   subscriber.on("message", function(channel, message) {
-    console.log("get bonnou");
-    sendBonnoData();
+    console.log("waiting bonnou data....");
+    io.emit("bonnou_init", {});
+    io.emit("bonnou_loading", {});
+    subscriber.subscribe('bnNotify');
+    subscriber.on("message", function(channel, message) {
+      console.log("get bonnou");
+      sendBonnoData();
+    });
   });
-
 });
 
 //煩悩データをクライアントに送る 
@@ -124,10 +127,7 @@ function playBell() {
   });
 }
 
-//テスト用
-function sleep(time, callback) {
-  setTimeout(callback, time);
-}
+
 
 //終了をサーバに通知
 function finish(id) {
