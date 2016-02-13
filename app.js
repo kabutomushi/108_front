@@ -56,9 +56,16 @@ function sendBonnoData(){
     console.log("bonnou id:"+id);
   });
 }
-
-function setLebel(level){
-  return bonnou[level - 1];
+//レベル判定
+function setLevel(level){
+  switch (level) {
+    case 1:
+      return bonnou.level1;
+    case 2:
+      return bonnou.level2;
+    default:
+      return bonnou.level3;
+  }
 }
 
 // socket.io test
