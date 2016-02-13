@@ -9,11 +9,12 @@ var http = require("http").createServer(app);
 var io = require('socket.io')(http);
 http.listen(3000, "localhost");
 
-var serialport = "";
+var serialportname = "/dev/tty.usbmodemfa131";
 var serialport_n = 9600;
 var subscriber = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 var client = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 var publisher = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
+var id = 0;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -52,6 +53,30 @@ io.on('connection', function(socket) {
   });
 
 });
+
+var sp = new serialport.SerialPort(serialportname, {
+    baudRate: 9600,
+    dataBits: 8,
+    parity: 'none',
+    stopBits: 1,
+    flowControl: false,
+    parser: serialport.parsers.raw
+});
+
+sp.on('data', function(input) {
+    var buffer = new Buffer(input, 'utf8');
+    var stop = buffer.toString();
+    try {
+          console.log(buffer);
+          if(stop === "1"){
+            console.log("stop");
+            finish(id);
+          }
+    } catch(e) {
+      return;
+    }
+});
+
 //テスト用
 function sleep(time, callback) {
   setTimeout(callback, time);
