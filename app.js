@@ -38,7 +38,6 @@ app.listen(8080, function() {
   io.emit("bonnou_loading", {});
   subscriber.on("message", function(channel, message) {
     console.log("get bonnou");
-    sendBonnoData();
   });
 
 });
