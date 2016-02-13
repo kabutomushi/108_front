@@ -22,26 +22,26 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res) {
-
   // levelを変えるとHTMLが変化
   var level = 'level1';
   res.render('index', bonnou[level]);
-
-  //var subscriber = redis.createClient();
-  subscriber.subscribe('bnNotify');
-  console.log("connected redis");
-  subscriber.on("message", function(channel, message) {
-    console.log("get bonnou");
-    console.log(message);
-    redis.get(bnData);
-    io.emit("bonnou", bnData);
-    id = bnData.id;
-  });
 });
 
 app.listen(3000, function() {
-  console.log('Example app listening on port 3000!');
+  subscriber.subscribe('bnNotify');
 
+  //redisをsubscribeして来たらクライアントに通知
+  console.log("connected redis");
+  subscriber.on("message", function(channel, message) {
+    console.log("get bonnou");
+    client.get("bnData", function(err, val){
+      if(err) return console.log(err);
+      bonnouData = JSON.parse(val);
+      console.log(bonnouData);
+      io.emit("bonnou", bonnouData);
+      id = bonnou.id;
+    });
+  });
 });
 
 io.on('connection', function(socket) {
