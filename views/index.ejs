@@ -19,22 +19,81 @@
 </head>
 
 <body>
-	<div class="wrapper">
+
+	<div class="wrapper"></div>
+
+	<script id="loading-template" type="text/x-handlebars-template">
+		<!-- loading -->
+		<div class="loading">
+			解析中...
+		</div>
+		<!-- /loading -->
+	</script>
+
+	<script id="clear-template" type="text/x-handlebars-template">
 		<!-- result -->
-		<div class="result__level <%= bonnou_level %>">
+		<div class="result__level">
+			<!-- result-clear -->
 			<div class="result__text">
-				<p>あなたの煩悩は<span id="result__level--score"><ruby><rb><%= bonnou_level_name %></rb>
-					<rt><%= bonnou_level_name_ruby %></rt></ruby></span>です</p>
-				<p class="result__level--info"><%= bonnou_level_description %></p>
+				<p>煩悩が開放されました</p>
+				<p class="result__clear--info">Facebookに開放の軌跡が刻まれます</p>
+			</div>
+			<!-- /result-clear -->
+			<div id="result__bell">
+			</div>
+		</div>
+		<!-- /result -->
+	</script>
+
+	<script id="result-template" type="text/x-handlebars-template">
+		<!-- result -->
+		<div class="result__level {{bonnou_level}}">
+			<div class="result__text">
+				<p>あなたの煩悩は<span id="result__level--score"><ruby><rb>{{bonnou_level_name}}</rb>
+						<rt>{{bonnou_level_name_ruby}}</rt></ruby></span>です</p>
+				<p class="result__level--info">{{bonnou_level_description}}</p>
 			</div>
 			<div id="result__bell">
 			</div>
 		</div>
 		<!-- /result -->
-	</div>
-	<!-- Place your content here -->
-	<!-- SCRIPTS -->
-	<!-- Example: <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+	</script>
+	<script src="js/handlebars-v4.0.5.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+	<script>
+		var socket = io();
+
+		socket.on('bonnou_init', function() {
+			$(".wrapper").empty();
+			$(document.body).removeClass("cleae");
+		});
+
+		socket.on('bonnou_clear', function() {
+			var source = $("#clear-template").html(),
+				template = Handlebars.compile(source);
+			$(".wrapper").empty();
+			$(".wrapper").append(template());
+			$(document.body).attr("class", "clear");
+		});
+
+		socket.on('bonnou_loading', function() {
+			var source = $("#loading-template").html(),
+				template = Handlebars.compile(source);
+			$(".wrapper").empty();
+			$(".wrapper").append(template());
+			$(document.body).removeClass("clear");
+		});
+
+		socket.on('bonnou_result', function(data) {
+
+			var source = $("#result-template").html(),
+				template = Handlebars.compile(source);
+			$(".wrapper").empty();
+			$(".wrapper").append(template(data));
+			$(document.body).removeClass("clear");
+		});
+	</script>
 </body>
 
 </html>

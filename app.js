@@ -23,9 +23,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res) {
-  // levelを変えるとHTMLが変化
-  var level = 'level1';
-  res.render('index', bonnou[level]);
+  res.render('index', {
+    title: '108(ワン・オー・エイト)'
+  });
 });
 
 app.listen(3000, function() {
@@ -35,8 +35,8 @@ app.listen(3000, function() {
   console.log("connected redis");
   subscriber.on("message", function(channel, message) {
     console.log("get bonnou");
-    client.get("bnData", function(err, val){
-      if(err) return console.log(err);
+    client.get("bnData", function(err, val) {
+      if (err) return console.log(err);
       bonnouData = JSON.parse(val);
       console.log(bonnouData);
       io.emit("bonnou", bonnouData);
@@ -45,38 +45,49 @@ app.listen(3000, function() {
   });
 });
 
+// socket.io test
+app.get('/init', function(req, res) {
+  io.emit("bonnou_init", {});
+});
+app.get('/clear', function(req, res) {
+  io.emit("bonnou_clear", {});
+});
+app.get('/loading', function(req, res) {
+  io.emit("bonnou_loading", {});
+});
+app.get('/result', function(req, res) {
+  io.emit("bonnou_result", bonnou[req.query.result]);
+});
+app.listen(8080, function() {
+  console.log('Example app listening on port 3000!');
+});
+
 io.on('connection', function(socket) {
   console.log('a user connected');
-
-  sleep(1000, function() {
-    io.emit("bonnou", "bonnou");
-    console.log("send");
-  });
-
 });
 
 var sp = new serialport.SerialPort(serialportname, {
-    baudRate: 9600,
-    dataBits: 8,
-    parity: 'none',
-    stopBits: 1,
-    flowControl: false,
-    parser: serialport.parsers.raw
+  baudRate: 9600,
+  dataBits: 8,
+  parity: 'none',
+  stopBits: 1,
+  flowControl: false,
+  parser: serialport.parsers.raw
 });
 
 sp.on('data', function(input) {
-    var buffer = new Buffer(input, 'utf8');
-    var stop = buffer.toString();
-    try {
-          console.log(buffer);
-          if(stop === "1"){
-            console.log("stop");
-            playBell();
-            finish(id);
-          }
-    } catch(e) {
-      return;
+  var buffer = new Buffer(input, 'utf8');
+  var stop = buffer.toString();
+  try {
+    console.log(buffer);
+    if (stop === "1") {
+      console.log("stop");
+      playBell();
+      finish(id);
     }
+  } catch (e) {
+    return;
+  }
 });
 
 function playBell() {
@@ -98,26 +109,23 @@ function sleep(time, callback) {
 function finish(id) {
   client.lpush("bnDelete", id);
   publisher.publish("bnComplete", id);
-  id="";
+  id = "";
 }
 
 var bonnou = {
   'level1': {
-    title: '108(ワン・オー・エイト)',
     bonnou_level: 'level1',
     bonnou_level_name: '仏級',
     bonnou_level_name_ruby: 'ほとけきゅう',
     bonnou_level_description: 'もはや人間ではありません。'
   },
   'level2': {
-    title: '108(ワン・オー・エイト)',
     bonnou_level: 'level2',
     bonnou_level_name: '人間級',
     bonnou_level_name_ruby: 'にんげんきゅう',
     bonnou_level_description: 'ほどほどに煩悩です。鐘を鳴らしましょう。'
   },
   'level3': {
-    title: '108(ワン・オー・エイト)',
     bonnou_level: 'level3',
     bonnou_level_name: '畜生級',
     bonnou_level_name_ruby: 'ちくしょうきゅう',
