@@ -27,8 +27,6 @@ app.get('/', function(req, res) {
     title: '108(ワン・オー・エイト)'
   });
   io.emit("bonnou_init", {});
-  //テスト用
-  sendBonnoData();
 });
 
 app.listen(8080, function() {
@@ -38,6 +36,7 @@ app.listen(8080, function() {
   io.emit("bonnou_loading", {});
   subscriber.on("message", function(channel, message) {
     console.log("get bonnou");
+    sendBonnoData();
   });
 
 });
