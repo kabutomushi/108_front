@@ -3,6 +3,8 @@ var redis = require('redis');
 var path = require('path');
 var express = require('express');
 var app = express();
+var path = require('path');
+var ejs = require('ejs');
 var http = require("http").createServer(app);
 var io = require('socket.io')(http);
 http.listen(3000, "localhost");
@@ -12,12 +14,15 @@ var serialport_n = 9600;
 var subscriber = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 var client = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 var publisher = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
-var slppe = require('sleep');
 
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-  
+
+  res.render('index', {title: "test"});
 
   //var subscriber = redis.createClient();
   subscriber.subscribe('bnNotify');
@@ -41,7 +46,7 @@ io.on('connection', function(socket){
     io.emit("bonnou", "bonnou");
     console.log("send");
   });
-      
+
 });
 //テスト用
 function sleep(time, callback){

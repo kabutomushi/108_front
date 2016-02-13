@@ -1,0 +1,239 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Bangers';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Bangers'), local('Bangers-Regular'), url(http://fonts.gstatic.com/s/bangers/v7/TgZv8lHkUbWVEqUOt_7mAALUuEpTyoUstqEm5AMlJo4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-style:normal;
+	font-weight: normal;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+html{
+    overflow-y: scroll;
+}
+
+blockquote, q {
+	quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+input, textarea,{
+	margin: 0;
+	padding: 0;
+}
+
+ol, ul{
+    list-style:none;
+}
+
+table{
+    border-collapse: collapse; 
+    border-spacing:0;
+}
+
+caption, th{
+    text-align: left;
+}
+
+a:focus {
+	outline:none;
+}
+
+.clearfix:after {
+	content: "."; 
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+
+.clearfix {
+	min-height: 1px;
+}
+
+* html .clearfix {
+	height: 1px;
+	/*¥*//*/
+	height: auto;
+	overflow: hidden;
+	/**/
+}
+
+.both{
+	clear:both;
+}
+
+.inline_block {  
+	display: inline-block;  
+	*display: inline;  
+	*zoom: 1;  
+}
+
+/* --- result.html --- */
+
+body {
+	background: #000;
+	background-size: cover;
+	font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+	color: #fff;
+}
+rt {
+	font-size: 35px;
+}
+
+body {
+	width: 100%;	
+}
+
+.wrapper {
+	width: 100%;
+	padding: 0;
+	font-size: 70px;
+}
+
+/*----- resultPage -----*/
+
+.result__level, .loading {
+	width: 100%;
+	margin: 20px auto 0;
+	text-align: center;
+}
+#result__level--score {
+	width: 1200px;
+	padding: 40px 40px 30px;
+	margin: 20px;
+	font-size: 120px;
+	background: #fff;
+	color: #000;
+	letter-spacing: 0.1em;
+}
+.result__level--info, .result__clear--info {
+	margin: 25px 0 0;
+	font-size: 45px;
+}
+#result__bell {
+	width: 100%;
+	height: 700px;
+	margin: 20px auto 0;
+}
+.level1 #result__bell {
+	background: url(../img/bell_level1.png) no-repeat;
+}
+.level2 #result__bell {
+	opacity: 0.4;
+}
+.level2 #result__bell, .level3 #result__bell {
+	background: url(../img/bell_cloud.png),url(../img/bell_cloud.png) 400px 0;
+	animation: cloudMove 120s infinite;
+}
+.clear #result__bell {
+	background: url(../img/bell_cloud.png),url(../img/bell_cloud.png) 400px 0;
+	animation: cloudMoveClear 3s;
+	opacity: 0;
+}
+
+/*----- animation -----*/
+
+@keyframes cloudMove {
+    0% {background-position: 0 0, 400px 0;}
+    50% {background-position: -1366px 0px, 1366px 0px;}
+    100% {background-position: 0 0, 400px 0px;}
+}
+
+-webkit-@keyframes cloudMove {
+    0% {background-position: 0 0, 400px 0;}
+    50% {background-position: -1366px 0px, 1366px 0px;}
+    100% {background-position: 0 0, 400px 0px;}
+}
+
+@keyframes cloudMoveClear {
+    0% {
+    	background-position: 0 0, 400px 0;
+    	opacity: 1;
+    }
+    100% {
+    	background-position: -1366px 0px, 1366px 0px;
+    	opacity: 0;
+    }
+}
+
+-webkit-@keyframes cloudMoveClear {
+    0% {
+    	background-position: 0 0, 400px 0;
+    	opacity: 1;
+    }
+    100% {
+    	background-position: -1366px 0px, 1366px 0px;
+    	opacity: 0;
+    }
+}
+
+/*loading*/
+
+.loading {
+	animation: textSwitch 3s infinite;
+}
+
+@keyframes textSwitch {
+    0% {opacity: 1;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+-webkit-@keyframes textSwitch {
+    0% {opacity: 1;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+/*clear*/
+
+.clear {
+	background: #1e90ff;
+	animation: cloudMoveClearBg 3s;
+}
+
+@keyframes cloudMoveClearBg {
+    0% {background: #000;}
+    100% {background: #1e90ff;
+    }
+}
+
+-webkit-@keyframes cloudMoveClearBg {
+    0% {background: #000;}
+    100% {background: #1e90ff;
+    }
+}
