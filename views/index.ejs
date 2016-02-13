@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title><%= title %></title>
-<meta charset="utf-8">
-<meta name="description" content="">
-<meta name="author" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="css/style.css">
-<!--[if lt IE 9]>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>
+		<%= title %>
+	</title>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/style.css">
+	<!--[if lt IE 9]>
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<link rel="shortcut icon" href="">
+	<link rel="shortcut icon" href="">
 </head>
+
 <body>
 	<div class="wrapper">
 		<!-- result -->
-		<div class="result__level level3">
+		<div class="result__level <%= bonnou_level %>">
 			<div class="result__text">
-				<p>あなたの煩悩は<span id="result__level--score"><ruby><rb>畜生級</rb><rt>ちくしょうきゅう</rt></ruby></span>です</p>
-				<p class="result__level--info">かなりの畜生です。すぐに鐘を鳴らしましょう。</p>
+				<p>あなたの煩悩は<span id="result__level--score"><ruby><rb><%= bonnou_level_name %></rb>
+					<rt><%= bonnou_level_name_ruby %></rt></ruby></span>です</p>
+				<p class="result__level--info"><%= bonnou_level_description %></p>
 			</div>
 			<div id="result__bell">
 			</div>
 		</div>
 		<!-- /result -->
 	</div>
-<!-- Place your content here -->
-<!-- SCRIPTS -->
-<!-- Example: <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+	<!-- Place your content here -->
+	<!-- SCRIPTS -->
+	<!-- Example: <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
 </body>
+
 </html>
