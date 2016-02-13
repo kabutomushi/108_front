@@ -50,7 +50,7 @@ function sendBonnoData(){
     console.log(bonnouData);
     level = setLevel(bonnouData.level);
     io.emit("bonnou_result", level);
-    id = bonnou.id;
+    id = bonnouData.id;
     console.log("bonnou id:"+id);
   });
 }
