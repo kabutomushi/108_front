@@ -50,9 +50,15 @@ function sendBonnoData(){
     if (err) return console.log(err);
     bonnouData = JSON.parse(val);
     console.log(bonnouData);
-    io.emit("bonnou_result", bonnouData);
+    level = setLevel(bonnouData.level);
+    io.emit("bonnou_result", level);
     id = bonnou.id;
+    console.log("bonnou id:"+id);
   });
+}
+
+function setLebel(level){
+  return bonnou[level - 1];
 }
 
 // socket.io test
@@ -95,6 +101,7 @@ sp.on('data', function(input) {
   }
 });
 
+//煩悩を払う
 function clearBonno(bonnnouData){
   console.log("stop");
   playBell();
