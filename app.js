@@ -7,6 +7,7 @@ var path = require('path');
 var ejs = require('ejs');
 var http = require("http").createServer(app);
 var io = require('socket.io')(http);
+var exec = require('child_process').exec;
 http.listen(3000, "localhost");
 
 var serialportname = "/dev/tty.usbmodemfa131";
@@ -70,12 +71,26 @@ sp.on('data', function(input) {
           console.log(buffer);
           if(stop === "1"){
             console.log("stop");
+            playBell();
             finish(id);
           }
     } catch(e) {
       return;
     }
 });
+
+function playBell() {
+  var filename = 'lib/bell.wav';
+  var command = 'afplay ' + filename;
+  exec(command, function(err, stdout, stderr) {
+    if (!err) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+    } else {
+      console.log(err);
+    }
+  });
+}
 
 //テスト用
 function sleep(time, callback) {
