@@ -26,24 +26,34 @@ app.get('/', function(req, res) {
   res.render('index', {
     title: '108(ワン・オー・エイト)'
   });
+  io.emit("bonnou_init", {});
+  //テスト用
+  sendBonnoData();
 });
 
 app.listen(8080, function() {
+  //煩悩待ち
   subscriber.subscribe('bnNotify');
-
-  //redisをsubscribeして来たらクライアントに通知
-  console.log("connected redis");
+  console.log("waiting bonnou data....");
+  io.emit("bonnou_loading", {});
   subscriber.on("message", function(channel, message) {
     console.log("get bonnou");
-    client.get("bnData", function(err, val) {
-      if (err) return console.log(err);
-      bonnouData = JSON.parse(val);
-      console.log(bonnouData);
-      io.emit("bonnou", bonnouData);
-      id = bonnou.id;
-    });
+    sendBonnoData();
   });
+
 });
+
+//煩悩データをクライアントに送る 
+function sendBonnoData(){
+//redisをsubscribeして来たらクライアントに通知
+  client.get("bnData", function(err, val) {
+    if (err) return console.log(err);
+    bonnouData = JSON.parse(val);
+    console.log(bonnouData);
+    io.emit("bonnou_result", bonnouData);
+    id = bonnou.id;
+  });
+}
 
 // socket.io test
 app.get('/init', function(req, res) {
@@ -72,20 +82,25 @@ var sp = new serialport.SerialPort(serialportname, {
   parser: serialport.parsers.raw
 });
 
+//鐘の入力を受け付ける
 sp.on('data', function(input) {
   var buffer = new Buffer(input, 'utf8');
   var stop = buffer.toString();
   try {
-    console.log(buffer);
     if (stop === "1") {
-      console.log("stop");
-      playBell();
-      finish(id);
+      clearBonno(bonnouData);
     }
   } catch (e) {
     return;
   }
 });
+
+function clearBonno(bonnnouData){
+  console.log("stop");
+  playBell();
+  io.emit("bonnou_clear", {});
+  finish(id);
+}
 
 function playBell() {
   var filename = 'lib/bell.mp3';
@@ -104,6 +119,7 @@ function sleep(time, callback) {
 
 //終了をサーバに通知
 function finish(id) {
+  console.log("clear id:"+ id);
   client.lpush("bnDelete", id);
   publisher.publish("bnComplete", id);
   id = "";
