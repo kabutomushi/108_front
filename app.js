@@ -5,6 +5,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var path = require('path');
+var ejs = require('ejs');
 
 var serialport = "";
 var serialport_n = 9600;
@@ -14,8 +15,14 @@ var publisher = redis.createClient(6379, 'tk2-244-31758.vs.sakura.ne.jp');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+
+  res.render('index', {title: "test"});
+
+  //res.sendFile(__dirname + '/index.html');
 
   //var subscriber = redis.createClient();
   subscriber.subscribe('bnNotify');
