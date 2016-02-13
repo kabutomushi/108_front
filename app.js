@@ -64,10 +64,11 @@ var sp = new serialport.SerialPort(serialportname, {
 sp.on('data', function(input) {
     var buffer = new Buffer(input, 'utf8');
     try {
-        if(buffer === "0"){
-          console.log("stop");
-          finish(id);
-        }
+          console.log(buffer);
+          if(buffer === "0"){
+            console.log("stop");
+            finish(id);
+          }
     } catch(e) {
         return;
     }
