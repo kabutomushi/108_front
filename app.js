@@ -45,7 +45,6 @@ app.listen(3000, function() {
   });
 });
 
-<< << << < HEAD
 // socket.io test
 app.get('/init', function(req, res) {
   io.emit("bonnou_init", {});
@@ -63,7 +62,6 @@ app.listen(8080, function() {
   console.log('Example app listening on port 3000!');
 });
 
-=== === = >>> >>> > master
 io.on('connection', function(socket) {
   console.log('a user connected');
 });
