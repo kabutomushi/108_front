@@ -83,10 +83,7 @@ function playBell() {
   var filename = 'lib/bell.mp3';
   var command = 'afplay ' + filename;
   exec(command, function(err, stdout, stderr) {
-    if (!err) {
-      console.log('stdout: ' + stdout);
-      console.log('stderr: ' + stderr);
-    } else {
+    if (err) {
       console.log(err);
     }
   });
