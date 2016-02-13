@@ -7,7 +7,7 @@ var path = require('path');
 var ejs = require('ejs');
 var http = require("http").createServer(app);
 var io = require('socket.io')(http);
-http.listen(8080, "localhost");
+http.listen(3000, "localhost");
 
 var serialport = "";
 var serialport_n = 9600;
