@@ -7,6 +7,7 @@ var path = require('path');
 var ejs = require('ejs');
 var http = require("http").createServer(app);
 var io = require('socket.io')(http);
+var exec = require('child_process').exec;
 http.listen(3000, "localhost");
 
 var serialportname = "/dev/tty.usbmodemfa131";
@@ -22,23 +23,29 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.get('/', function(req, res) {
-
   res.render('index', {
     title: '108(ワン・オー・エイト)'
   });
+});
 
-  //var subscriber = redis.createClient();
+app.listen(3000, function() {
   subscriber.subscribe('bnNotify');
+
+  //redisをsubscribeして来たらクライアントに通知
   console.log("connected redis");
   subscriber.on("message", function(channel, message) {
     console.log("get bonnou");
-    console.log(message);
-    redis.get(bnData);
-    io.emit("bonnou", bnData);
-    id = bnData.id;
+    client.get("bnData", function(err, val) {
+      if (err) return console.log(err);
+      bonnouData = JSON.parse(val);
+      console.log(bonnouData);
+      io.emit("bonnou", bonnouData);
+      id = bonnou.id;
+    });
   });
 });
 
+<< << << < HEAD
 // socket.io test
 app.get('/init', function(req, res) {
   io.emit("bonnou_init", {});
@@ -56,32 +63,44 @@ app.listen(8080, function() {
   console.log('Example app listening on port 3000!');
 });
 
+=== === = >>> >>> > master
 io.on('connection', function(socket) {
   console.log('a user connected');
 });
 
 var sp = new serialport.SerialPort(serialportname, {
-    baudRate: 9600,
-    dataBits: 8,
-    parity: 'none',
-    stopBits: 1,
-    flowControl: false,
-    parser: serialport.parsers.raw
+  baudRate: 9600,
+  dataBits: 8,
+  parity: 'none',
+  stopBits: 1,
+  flowControl: false,
+  parser: serialport.parsers.raw
 });
 
 sp.on('data', function(input) {
-    var buffer = new Buffer(input, 'utf8');
-    var stop = buffer.toString();
-    try {
-          console.log(buffer);
-          if(stop === "1"){
-            console.log("stop");
-            finish(id);
-          }
-    } catch(e) {
-      return;
+  var buffer = new Buffer(input, 'utf8');
+  var stop = buffer.toString();
+  try {
+    console.log(buffer);
+    if (stop === "1") {
+      console.log("stop");
+      playBell();
+      finish(id);
     }
+  } catch (e) {
+    return;
+  }
 });
+
+function playBell() {
+  var filename = 'lib/bell.mp3';
+  var command = 'afplay ' + filename;
+  exec(command, function(err, stdout, stderr) {
+    if (err) {
+      console.log(err);
+    }
+  });
+}
 
 //テスト用
 function sleep(time, callback) {
