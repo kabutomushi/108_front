@@ -32,6 +32,7 @@ app.get('/', function (req, res) {
     console.log(message);
     redis.get(bnData);
     io.emit("bonnou", bnData);
+    id = bnData.id;
   });
 });
 
@@ -58,4 +59,5 @@ function sleep(time, callback){
 function finish(id){
   client.lpush("bnDelete", id);
   publisher.publish("bnComplete", id);
+  id="";
 }
