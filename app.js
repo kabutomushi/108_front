@@ -31,6 +31,7 @@ app.get('/', function (req, res) {
     console.log("get bonnou");
     console.log(message);
     redis.get(bnData);
+    io.emit("bonnou", bnData);
   });
 });
 
