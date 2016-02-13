@@ -80,7 +80,7 @@ sp.on('data', function(input) {
 });
 
 function playBell() {
-  var filename = 'lib/bell.wav';
+  var filename = 'lib/bell.mp3';
   var command = 'afplay ' + filename;
   exec(command, function(err, stdout, stderr) {
     if (!err) {
